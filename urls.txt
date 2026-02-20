@@ -1,0 +1,2 @@
+course://web.backend?name="Хілінська Іванна"&group="ФЕП-23"&subgroup="Підгрупа 2"#KhIIvanna
+
