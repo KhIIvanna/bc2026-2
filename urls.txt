@@ -1,2 +1,2 @@
 course://web.backend?name="Хілінська Іванна"&group="ФЕП-23"&subgroup="Підгрупа 2"#KhIIvanna
-
+https://bank.gov.ua/NBUStatService/v1/statdirectory/inflation?period=m&date=202302&json
