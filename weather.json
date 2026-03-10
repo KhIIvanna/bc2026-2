@@ -1,0 +1,17 @@
+[
+  {
+    "Rainfall": 0.2,
+    "Pressure3pm": 1015.5,
+    "Humidity3pm": 30
+  },
+  {
+    "Rainfall": 8.4,
+    "Pressure3pm": 1008.1,
+    "Humidity3pm": 85
+  },
+  {
+    "Rainfall": 12.0,
+    "Pressure3pm": 1010.3,
+    "Humidity3pm": 92
+  }
+]
