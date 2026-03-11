@@ -6,6 +6,9 @@ program
   .requiredOption('-i, --input <path>', 'шлях до файлу для читання')
   .option('-o, --output <path>', 'шлях до файлу для запису результату')
   .option('-d, --display', 'вивести результат у консоль');
+  
+  .option('-h, --humidity', 'чи виводити вологість (Humidity3pm)')
+  .option('-r, --rainfall <number>', 'фільтрувати опади, більше ніж зазначене число');
 
 program.exitOverride();
 try {
