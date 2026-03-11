@@ -5,9 +5,8 @@ const program = new Command();
 program
   .requiredOption('-i, --input <path>', 'шлях до файлу для читання')
   .option('-o, --output <path>', 'шлях до файлу для запису результату')
-  .option('-d, --display', 'вивести результат у консоль');
-  
-  .option('-h, --humidity', 'чи виводити вологість (Humidity3pm)')
+  .option('-d, --display', 'вивести результат у консоль') // ПРИБРАЛИ КРАПКУ З КОМОЮ ТУТ
+  .option('-h, --humidity', 'чи виводити вологість')
   .option('-r, --rainfall <number>', 'фільтрувати опади, більше ніж зазначене число');
 
 program.exitOverride();
@@ -30,14 +29,29 @@ if (!fs.existsSync(options.input)) {
 const rawData = fs.readFileSync(options.input, 'utf8');
 const data = JSON.parse(rawData);
 
-const resultText = JSON.stringify(data, null, 4);
+let filteredData = data;
+
+if (options.rainfall) {
+    const limit = parseFloat(options.rainfall);
+    filteredData = data.filter(item => item.Rainfall > limit);
+}
+
+const resultLines = filteredData.map(item => {
+    let line = `Rainfall: ${item.Rainfall}, Pressure3pm: ${item.Pressure3pm}`;
+    if (options.humidity) {
+        line += `, Humidity3pm: ${item.Humidity3pm}`;
+    }
+    return line;
+});
+
+const finalOutput = resultLines.join('\n');
 
 if (options.display) {
-  console.log(resultText);
+  console.log(finalOutput);
 }
 
 if (options.output) {
-  fs.writeFileSync(options.output, resultText, {
+  fs.writeFileSync(options.output, finalOutput, {
     encoding: 'utf8',
     flag: 'w'
   });
