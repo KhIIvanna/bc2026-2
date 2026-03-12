@@ -5,7 +5,7 @@ const program = new Command();
 program
   .requiredOption('-i, --input <path>', 'шлях до файлу для читання')
   .option('-o, --output <path>', 'шлях до файлу для запису результату')
-  .option('-d, --display', 'вивести результат у консоль') // ПРИБРАЛИ КРАПКУ З КОМОЮ ТУТ
+  .option('-d, --display', 'вивести результат у консоль') 
   .option('-h, --humidity', 'чи виводити вологість')
   .option('-r, --rainfall <number>', 'фільтрувати опади, більше ніж зазначене число');
 
