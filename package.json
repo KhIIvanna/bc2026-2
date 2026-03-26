@@ -1,0 +1,23 @@
+{
+  "name": "bc2026-2",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/KhIIvanna/bc2026-2#readme",
+  "bugs": {
+    "url": "https://github.com/KhIIvanna/bc2026-2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KhIIvanna/bc2026-2.git"
+  },
+  "license": "ISC",
+  "author": "KhIIvanna",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "commander": "^14.0.3"
+  }
+}
