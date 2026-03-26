@@ -2,7 +2,6 @@ const { Command } = require('commander');
 const http = require('http');
 const fs = require('fs');
 const { XMLBuilder } = require('fast-xml-parser');
-
 const program = new Command();
 
 program
@@ -57,7 +56,13 @@ const server = http.createServer((req, res) => {
             const xmlOutput = builder.build({
                 weather_data: { record: filteredResults }
             });
-
+            
+            fs.writeFile('result.txt', xmlOutput, (writeErr) => {
+                if (writeErr) {
+                    console.error(writeErr);
+                }
+            });
+               
             res.writeHead(200);
             res.end(xmlOutput);
 
