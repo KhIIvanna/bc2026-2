@@ -1,6 +1,8 @@
 const { Command } = require('commander');
 const fs = require('fs');
-const http = require('http');
+const path = require('path');
+const express = require('express');
+const multer = require('multer');
 
 const program = new Command();
 
@@ -16,11 +18,40 @@ if (!fs.existsSync(options.cache)) {
   fs.mkdirSync(options.cache, { recursive: true });
 }
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Server running!!!!!!!!!!!');
+const app = express();
+const upload = multer({ dest: path.join(options.cache, 'uploads') });
+
+let inventory = [];
+let nextId = 1;
+
+// POST /register
+app.post('/register', upload.single('photo'), (req, res) => {
+  const { inventory_name, description } = req.body;
+
+  if (!inventory_name) {
+    return res.status(400).json({ error: 'Inventory name is required' });
+  }
+
+  const item = {
+    id: nextId++,
+    inventory_name,
+    description,
+    photo: req.file ? `/uploads/${req.file.filename}` : null
+  };
+
+  inventory.push(item);
+  res.status(201).json(item);
 });
 
-server.listen(options.port, options.host, () => {
+app.get('/uploads/:filename', (req, res) => {
+  res.type('jpeg');
+  res.sendFile(req.params.filename, {
+    root: path.resolve(options.cache, 'uploads')
+  });
+});
+
+app.use(express.static(path.join(__dirname)));
+
+app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}:${options.port}/`);
 });
