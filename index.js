@@ -42,15 +42,11 @@ app.post('/register', upload.single('photo'), (req, res) => {
   inventory.push(item);
   res.status(201).json(item);
 });
-
-app.get('/uploads/:filename', (req, res) => {
-  res.type('jpeg');
-  res.sendFile(req.params.filename, {
-    root: path.resolve(options.cache, 'uploads')
-  });
-});
-
 app.use(express.static(path.join(__dirname)));
+
+app.get('/inventory', (req, res) => {
+  res.json(inventory);
+});
 
 app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}:${options.port}/`);
