@@ -44,8 +44,21 @@ app.post('/register', upload.single('photo'), (req, res) => {
 });
 app.use(express.static(path.join(__dirname)));
 
+// GET /invertory
 app.get('/inventory', (req, res) => {
   res.json(inventory);
+});
+
+// GET /inventory/<ID>
+app.get('/inventory/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const item = inventory.find(i => i.id === id);
+
+  if (!item) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+
+  res.json(item);
 });
 
 app.listen(options.port, options.host, () => {
