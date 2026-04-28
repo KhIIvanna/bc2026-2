@@ -61,6 +61,29 @@ app.get('/inventory/:id', (req, res) => {
   res.json(item);
 });
 
+app.use(express.json()); // щоб читати JSON у запитах
+
+// PUT /inventory/:id
+app.put('/inventory/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const item = inventory.find(i => i.id === id);
+
+  if (!item) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+
+  const { inventory_name, description } = req.body;
+
+  if (inventory_name) {
+    item.inventory_name = inventory_name;
+  }
+  if (description) {
+    item.description = description;
+  }
+
+  res.json(item);
+});
+
 app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}:${options.port}/`);
 });
