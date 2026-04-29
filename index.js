@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
+const sharp = require('sharp');
 
 const program = new Command();
 
@@ -25,18 +26,25 @@ let inventory = [];
 let nextId = 1;
 
 // POST /register
-app.post('/register', upload.single('photo'), (req, res) => {
+app.post('/register', upload.single('photo'), async (req, res) => {
   const { inventory_name, description } = req.body;
 
   if (!inventory_name) {
     return res.status(400).json({ error: 'Inventory name is required' });
   }
 
+  let photoPath = null;
+  if (req.file) {
+    const jpegPath = path.join(options.cache, 'uploads', req.file.filename + '.jpg');
+    await sharp(req.file.path).jpeg().toFile(jpegPath);
+    photoPath = '/uploads/' + path.basename(jpegPath);
+  }
+
   const item = {
     id: nextId++,
     inventory_name,
     description,
-    photo: req.file ? `/uploads/${req.file.filename}` : null
+    photo: photoPath
   };
 
   inventory.push(item);
@@ -82,6 +90,27 @@ app.put('/inventory/:id', (req, res) => {
   }
 
   res.json(item);
+});
+
+// GET /inventory/:id/photo
+app.get('/inventory/:id/photo', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const item = inventory.find(i => i.id === id);
+
+  if (!item || !item.photo) {
+    return res.status(404).json({ error: 'Photo not found' });
+  }
+
+  const filePath = path.resolve(options.cache, 'uploads', path.basename(item.photo));
+
+  try {
+    const jpegBuffer = await sharp(filePath).jpeg().toBuffer();
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.send(jpegBuffer);
+  } catch (err) {
+    console.error(err);
+    res.status(404).json({ error: 'Photo not found or conversion failed' });
+  }
 });
 
 app.listen(options.port, options.host, () => {
