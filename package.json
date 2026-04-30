@@ -73,10 +73,12 @@
     "strnum": "^2.2.2",
     "superagent": "^10.3.0",
     "supports-color": "^5.5.0",
+    "swagger-ui-express": "^5.0.1",
     "to-regex-range": "^5.0.1",
     "touch": "^3.1.1",
     "undefsafe": "^2.0.5",
-    "wrappy": "^1.0.2"
+    "wrappy": "^1.0.2",
+    "yamljs": "^0.3.0"
   },
   "scripts": {
     "dev": "nodemon index.js"

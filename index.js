@@ -5,6 +5,10 @@ const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
 
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
+
 const program = new Command();
 
 program
@@ -55,10 +59,14 @@ app.post('/register', upload.single('photo'), async (req, res) => {
   res.status(201).json(item);
 });
 
+app.all('/register', (req, res) => res.status(405).json({ error: 'Method Not Allowed' }));
+
 // GET /invertory
 app.get('/inventory', (req, res) => {
   res.json(inventory);
 });
+
+app.all('/inventory', (req, res) => res.status(405).json({ error: 'Method Not Allowed' }));
 
 // GET /inventory/<ID>
 app.get('/inventory/:id', (req, res) => {
@@ -149,6 +157,8 @@ app.put('/inventory/:id/photo', upload.single('photo'), async (req, res) => {
   }
 });
 
+app.all('/inventory/:id/photo', (req, res) => res.status(405).json({ error: 'Method Not Allowed' }));
+
 // DELETE /inventory/<ID>
 app.delete('/inventory/:id', (req, res) => {
   const id = parseInt(req.params.id, 10);
@@ -162,6 +172,8 @@ app.delete('/inventory/:id', (req, res) => {
 
   res.json({ message: 'Item deleted successfully', item: deletedItem });
 });
+
+app.all('/inventory/:id', (req, res) => res.status(405).json({ error: 'Method Not Allowed' }));
 
 // POST /search
 app.post('/search', express.urlencoded({ extended: true }), (req, res) => {
@@ -181,11 +193,15 @@ app.post('/search', express.urlencoded({ extended: true }), (req, res) => {
   res.json(result);
 });
 
-app.all('/search', (req, res) => {
-  res.status(405).json({ error: 'Method not allowed' });
-});
+app.all('/search', (req, res) => res.status(405).json({ error: 'Method Not Allowed' }));
 
 app.use(express.static(path.join(__dirname)));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
 
 app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}:${options.port}/`);
