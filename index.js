@@ -20,6 +20,10 @@ if (!fs.existsSync(options.cache)) {
 }
 
 const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // щоб читати JSON у запитах
+
 const upload = multer({ dest: path.join(options.cache, 'uploads') });
 
 let inventory = [];
@@ -50,7 +54,6 @@ app.post('/register', upload.single('photo'), async (req, res) => {
   inventory.push(item);
   res.status(201).json(item);
 });
-app.use(express.static(path.join(__dirname)));
 
 // GET /invertory
 app.get('/inventory', (req, res) => {
@@ -68,8 +71,6 @@ app.get('/inventory/:id', (req, res) => {
 
   res.json(item);
 });
-
-app.use(express.json()); // щоб читати JSON у запитах
 
 // PUT /inventory/:id
 app.put('/inventory/:id', (req, res) => {
@@ -112,6 +113,79 @@ app.get('/inventory/:id/photo', async (req, res) => {
     res.status(404).json({ error: 'Photo not found or conversion failed' });
   }
 });
+
+// PUT /inventory/<ID>/photo
+app.put('/inventory/:id/photo', upload.single('photo'), async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const item = inventory.find(i => i.id === id);
+
+  if (!item) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'Photo file is required' });
+  }
+
+  try {
+    // видаляємо старе фото, якщо було
+    if (item.photo) {
+      const oldPath = path.resolve(options.cache, 'uploads', path.basename(item.photo));
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+    }
+
+    // створюємо нове фото
+    const jpegPath = path.join(options.cache, 'uploads', req.file.filename + '.jpg');
+    await sharp(req.file.path).jpeg().toFile(jpegPath);
+
+    item.photo = '/uploads/' + path.basename(jpegPath);
+
+    res.json(item);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Photo update failed' });
+  }
+});
+
+// DELETE /inventory/<ID>
+app.delete('/inventory/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const index = inventory.findIndex(i => i.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+
+  const deletedItem = inventory.splice(index, 1)[0];
+
+  res.json({ message: 'Item deleted successfully', item: deletedItem });
+});
+
+// POST /search
+app.post('/search', express.urlencoded({ extended: true }), (req, res) => {
+  const id = parseInt(req.body.id, 10);
+  const item = inventory.find(i => i.id === id);
+
+  if (!item) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+
+  const result = { ...item };
+
+  if (req.body.has_photo && item.photo) {
+    result.description += ` (Фото: ${item.photo})`;
+  }
+
+  res.json(result);
+});
+
+app.all('/search', (req, res) => {
+  res.status(405).json({ error: 'Method not allowed' });
+});
+
+app.use(express.static(path.join(__dirname)));
 
 app.listen(options.port, options.host, () => {
   console.log(`Server running at http://${options.host}:${options.port}/`);
