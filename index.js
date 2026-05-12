@@ -136,7 +136,7 @@ app.put('/inventory/:id/photo', upload.single('photo'), async (req, res) => {
   }
 
   try {
-    // видаляємо старе фото, якщо було
+    // видаляється старе фото, якщо було
     if (item.photo) {
       const oldPath = path.resolve(options.cache, 'uploads', path.basename(item.photo));
       if (fs.existsSync(oldPath)) {
