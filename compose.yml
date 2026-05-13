@@ -8,16 +8,16 @@ services:
       - .:/app
       - /app/node_modules
     command: npm run dev
+    env_file:
+      - .env
     depends_on:
       - db
 
   db:
     image: postgres:15
     restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: inventorydb
+    env_file:
+      - .env
     volumes:
       - ./db:/docker-entrypoint-initdb.d
     ports:
