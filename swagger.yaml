@@ -1,0 +1,176 @@
+openapi: 3.0.0
+info:
+  title: Inventory Service API
+  version: 1.0.0
+  description: API для реєстрації, пошуку та управління інвентарем
+servers:
+  - url: http://127.0.0.1:3000
+
+paths:
+  /register:
+    post:
+      summary: Register new inventory item
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                inventory_name:
+                  type: string
+                description:
+                  type: string
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+        '400':
+          description: Missing inventory_name
+
+  /inventory:
+    get:
+      summary: Get all inventory items
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItem'
+
+  /inventory/{id}:
+    get:
+      summary: Get inventory item by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+        '404':
+          description: Item not found
+    put:
+      summary: Update inventory item by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inventory_name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Item updated
+        '404':
+          description: Item not found
+    delete:
+      summary: Delete inventory item by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Item deleted
+        '404':
+          description: Item not found
+
+  /inventory/{id}/photo:
+    get:
+      summary: Get photo of inventory item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Photo not found
+    put:
+      summary: Update photo of inventory item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Photo updated
+        '404':
+          description: Item not found
+
+  /search:
+    post:
+      summary: Search inventory item by ID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                has_photo:
+                  type: boolean
+      responses:
+        '201':
+          description: Item found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+        '404':
+          description: Item not found
+        '405':
+          description: Method not allowed
+
+components:
+  schemas
