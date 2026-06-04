@@ -1,0 +1,305 @@
+{
+  "info": {
+    "_postman_id": "c9f9b014-d4e0-413b-870f-105333acae32",
+    "name": "Inventory API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54409548",
+    "_collection_link": "https://go.postman.co/collection/54409548-c9f9b014-d4e0-413b-870f-105333acae32?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "POST /register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "inventory_name",
+              "value": "Андрій",
+              "type": "text",
+              "uuid": "54c1d8f9-f41c-4950-93ef-13bc50ab8f05"
+            },
+            {
+              "key": "description",
+              "value": "Атлет",
+              "type": "text",
+              "uuid": "53261f6a-6422-45c2-9864-5734912e1ff5"
+            },
+            {
+              "key": "photo",
+              "type": "file",
+              "uuid": "8337c07b-bac0-487f-8aab-443907862706",
+              "src": "postman-cloud:///1f143ea5-296f-4870-8ac2-6b8053d71007"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/register",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET / inventory",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/inventory",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "inventory"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /inventory/<ID>",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/inventory/3",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "inventory",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT /inventory/<ID>",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"inventory_name\": \"Марія\",\r\n  \"description\": \"Медсестра\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/inventory/2",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "inventory",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /inventory/<ID>/photo",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/inventory/3/photo",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "inventory",
+            "3",
+            "photo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT /inventory/<ID>/photo",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "photo",
+              "type": "file",
+              "uuid": "6d335171-36c1-420e-9bbb-04589f5f492b",
+              "src": "postman-cloud:///1f14412b-ff12-4cb0-bae1-9c1a79be23ad"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/inventory/1/photo",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "inventory",
+            "1",
+            "photo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE /inventory/<ID>",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/inventory/4",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "inventory",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /RegisterForm.html",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/RegisterForm.html",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "RegisterForm.html"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /SearchForm.html",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/SearchForm.html",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "SearchForm.html"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST /search",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id",
+              "value": "5",
+              "type": "text",
+              "uuid": "5e1754c8-7a20-4c6d-b4f1-502961eb4e54"
+            },
+            {
+              "key": "has_photo",
+              "value": "true",
+              "type": "text",
+              "uuid": "28f0baac-40ab-404b-be24-72d76b7cff24"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/search",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "search"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
